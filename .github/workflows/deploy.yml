@@ -22,8 +22,9 @@ jobs:
       - id: docker-build
         name: Build Docker image
         run: |
-          echo github.run_number: "${{ github.run_number }}"
-          echo env.ECR_REPO: "${{ env.ECR_REPO }}"
+          echo env.ECR_REPO: "${{ toJson(github) }}"
+          echo env.ECR_REPO: "${{ toJson(env)  }}"
+      #     echo github.run_number: "${{ github.run_number }}"
       #     docker build -t shopify:latest .
 
       # - id: aws-creds
