@@ -22,6 +22,7 @@ jobs:
       - id: docker-build
         name: Build Docker image
         run: |
+          echo "${{ github.run_number }}"
           echo "${{ github.env.ECR_REPO }}"
           echo "::debug::Set the Octocat variable"
           docker build -t ${{ github.env.ECR_REPO }}
