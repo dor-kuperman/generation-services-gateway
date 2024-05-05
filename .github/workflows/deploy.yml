@@ -22,8 +22,9 @@ jobs:
       - id: docker-build
         name: Build Docker image
         run: |
-          echo "${{ env.ECR_REPO }}"
-          docker build -t ${{ env.ECR_REPO }}:latest .
+          echo "${{ github.env.ECR_REPO }}"
+          echo "::notice file=app.js,line=1,col=5,endColumn=7::Missing semicolon"
+          docker build -t ${{ github.env.ECR_REPO }}:latest .
 
       - id: aws-creds
         name: Configure AWS Creds
