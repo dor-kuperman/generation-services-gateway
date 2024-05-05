@@ -23,8 +23,8 @@ jobs:
         name: Build Docker image
         run: |
           echo "${{ github.env.ECR_REPO }}"
-          echo "::notice file=app.js,line=1,col=5,endColumn=7::Missing semicolon"
-          docker build -t ${{ github.env.ECR_REPO }}:latest .
+          echo "::debug::Set the Octocat variable"
+          docker build -t ${{ github.env.ECR_REPO }}
 
       - id: aws-creds
         name: Configure AWS Creds
@@ -42,9 +42,9 @@ jobs:
         name: Push Docker image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ env.ECR_REPO }}
+          ECR_REPOSITORY: ${{ github.env.ECR_REPO }}
           IMAGE_TAG: build-${{ github.run_number }}
         run: |
-          docker tag ${{ env.ECR_REPO }}:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker tag ${{ github.env.ECR_REPO }}:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=imageTag::$IMAGE_TAG"
