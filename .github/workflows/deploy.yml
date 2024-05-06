@@ -6,11 +6,8 @@ on:
 jobs:
   build-deploy:
     runs-on: ubuntu-20.04
-    outputs:
-      imageTag: ${{ steps.docker-push.outputs.imageTag }}
     steps:
       - uses: actions/checkout@v2
-
       - id: install
         name: yarn install
         run: yarn
@@ -19,12 +16,21 @@ jobs:
         name: Build
         run: yarn build
 
+      - name: Set the value
+        id: step_one
+        run: |
+          echo "action_state=yellow" >> "$GITHUB_ENV"
+      - name: Use the value
+        id: step_two
+        run: |
+          printf '%s\n' "$action_state" # This will output 'yellow'
+
       - id: docker-build
         name: Build Docker image
         run: |
           echo toJson(github): "${{ toJson(github) }}"
           echo toJson(env): "${{ toJson(env)  }}"
-      #     echo github.run_number: "${{ github.run_number }}"
+      #     echo github.run_number
       #     docker build -t shopify:latest .
 
       # - id: aws-creds
