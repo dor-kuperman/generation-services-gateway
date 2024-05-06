@@ -19,11 +19,7 @@ jobs:
       - id: docker-build
         name: Build Docker image
         run: |
-          echo vars: "${{  vars.ECR_REPO  }}"
-          echo secrets.AWS_ACCESS_KEY_ID: "${{  secrets.AWS_ACCESS_KEY_ID  }}"
-          echo secrets.AWS_SECRET_ACCESS_KEY: "${{  secrets.AWS_SECRET_ACCESS_KEY  }}"
-      #     echo github.run_number
-      #     docker build -t shopify:latest .
+          docker build -t gateway:latest .
 
       # - id: aws-creds
       #   name: Configure AWS Creds
