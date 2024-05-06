@@ -19,7 +19,7 @@ jobs:
       - id: docker-build
         name: Build Docker image
         run: |
-          docker build -t ${{ vars.ECR_REPO }} .
+          docker build -t gateway .
 
       - id: aws-creds
         name: Configure AWS Creds
@@ -40,7 +40,6 @@ jobs:
           ECR_REPOSITORY: ${{ vars.ECR_REPO }}
           IMAGE_TAG: latest
         run: |
-          echo "hi ${{ vars.ECR_REPO }}:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-          docker tag ${{ vars.ECR_REPO }}:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker tag gateway $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=imageTag::$IMAGE_TAG"
