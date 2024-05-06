@@ -1,0 +1,45 @@
+on:
+  push:
+    branches:
+      - "docker-deploy"
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - id: install
+        name: yarn install
+        run: yarn
+
+      - id: build
+        name: Build
+        run: yarn build
+
+      - id: docker-build
+        name: Build Docker image
+        run: |
+          docker build -t gateway .
+
+      - id: aws-creds
+        name: Configure AWS Creds
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: il-central-1
+
+      - id: login-ecr
+        name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - id: docker-push
+        name: Push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ vars.ECR_REPO }}
+          IMAGE_TAG: gateway
+        run: |
+          docker tag gateway $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=imageTag::$IMAGE_TAG"
