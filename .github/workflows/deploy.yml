@@ -40,7 +40,7 @@ jobs:
           ECR_REPOSITORY: ${{ vars.ECR_REPO }}
           IMAGE_TAG: build-${{ github.run_number }}:latest
         run: |
-          echo "${{ vars.ECR_REPO }}:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          echo "hi ${{ vars.ECR_REPO }}:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
           docker tag ${{ vars.ECR_REPO }}:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=imageTag::$IMAGE_TAG"
